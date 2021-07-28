@@ -11,29 +11,30 @@ import SwiftUI
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
     @FetchRequest(entity: Ship.entity(), sortDescriptors: [], predicate: NSPredicate(format: "universe IN %@", ["Aliens","Firefly", "Star Trek"])) var ships: FetchedResults<Ship>
+    @State private var lastNameFilter = "A"
     var body: some View {
         VStack {
-            List(ships, id: \.self) { ship in
-                Text(ship.name ?? "Unknown")
-            }
-            Button("Add") {
-                let ship1 = Ship(context: self.moc)
-                ship1.name = "Enterprise"
-                ship1.universe = "Star Trek"
+            FilteredList(filter: lastNameFilter)
+            Button("Add Examples") {
+                let taylor = Singer(context: self.moc)
+                taylor.firstName = "Taylor"
+                taylor.lastName = "Swift"
                 
-                let ship2 = Ship(context: self.moc)
-                ship2.name = "Defiant"
-                ship2.universe = "Star Trek"
+                let ed = Singer(context: self.moc)
+                ed.firstName = "Ed"
+                ed.lastName = "Sheeran"
                 
-                let ship3 = Ship(context: self.moc)
-                ship3.name = "Millennium Falcon"
-                ship3.universe = "Star wars"
-                
-                let ship4 = Ship(context: self.moc)
-                ship4.name = "Executor"
-                ship4.universe = "Star wars"
-                
+                let adele = Singer(context: self.moc)
+                adele.firstName = "Adele"
+                adele.lastName = "Adkins"
+                                
                 try? self.moc.save()
+            }
+            Button("Show A") {
+                self.lastNameFilter = "A"
+            }
+            Button("Show S") {
+                self.lastNameFilter = "S"
             }
         }
     }
