@@ -6,15 +6,21 @@
 //
 
 import SwiftUI
-
+enum Predicate: String {
+    case beginswith = "BEGINSWITH"
+    
+}
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) var moc
-    @FetchRequest(entity: Country.entity(), sortDescriptors: []) var countries: FetchedResults<Country>
+  /*  @FetchRequest(entity: Country.entity(), sortDescriptors: []) var countries: FetchedResults<Country>*/
+    @FetchRequest(entity: Singer.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Singer.firstName, ascending: false)]) var singers: FetchedResults<Singer>
     @State private var lastNameFilter = "A"
+
     var body: some View {
         VStack {
-            List {
+            FilteredList(filter: lastNameFilter, predicate: "lastName \(Predicate.beginswith.rawValue) %@")
+           /* List {
                 ForEach(countries, id: \.self) { country in
                     Section(header: Text(country.wrappedFullName)) {
                         ForEach(country.candyArray, id: \.self) { candy in
@@ -23,8 +29,8 @@ struct ContentView: View {
                     }
                     
                 }
-            }
-            Button("Add") {
+            }*/
+            /*Button("Add") {
                 let candy1 = Candy(context: self.moc)
                 candy1.name = "Mars"
                 candy1.origin = Country(context: self.moc)
@@ -50,7 +56,7 @@ struct ContentView: View {
                 candy4.origin?.fullName = "Switzerland"
                                 
                 try? self.moc.save()
-            }
+            }*/
             Button("Show A") {
                 self.lastNameFilter = "A"
             }

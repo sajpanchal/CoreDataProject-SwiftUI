@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FilteredList: View {
     var fetchRequest: FetchRequest<Singer>
-    init(filter: String) {
-        fetchRequest = FetchRequest<Singer>(entity: Singer.entity(), sortDescriptors: [], predicate: NSPredicate(format: "lastName BEGINSWITH %@", filter))
+    init(filter: String, predicate: String) {
+        fetchRequest = FetchRequest<Singer>(entity: Singer.entity(), sortDescriptors: [NSSortDescriptor(keyPath: \Singer.firstName, ascending: false)], predicate: NSPredicate(format: "\(predicate)", filter))
     }
     var body: some View {
         List(fetchRequest.wrappedValue, id: \.self) { singer in
@@ -21,6 +21,6 @@ struct FilteredList: View {
 
 struct FilteredList_Previews: PreviewProvider {
     static var previews: some View {
-        FilteredList(filter: "")
+        FilteredList(filter: "", predicate: "lastName BEGINSWITH %@")
     }
 }
